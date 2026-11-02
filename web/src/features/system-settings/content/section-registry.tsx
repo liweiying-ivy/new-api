@@ -21,6 +21,7 @@ import { createSectionRegistry } from '../utils/section-registry'
 import { AnnouncementsSection } from './announcements-section'
 import { ApiInfoSection } from './api-info-section'
 import { ChatSettingsSection } from './chat-settings-section'
+import { ContactMethodsSection } from './contact-methods-section'
 import { DashboardSection } from './dashboard-section'
 import { DrawingSettingsSection } from './drawing-settings-section'
 import { FAQSection } from './faq-section'
@@ -91,6 +92,13 @@ const CONTENT_SECTIONS = [
         enabled={settings['console_setting.uptime_kuma_enabled']}
         data={settings['console_setting.uptime_kuma_groups']}
       />
+    ),
+  },
+  {
+    id: 'contact-methods',
+    titleKey: 'Contact Methods',
+    build: (settings: ContentSettings) => (
+      <ContactMethodsSection data={settings.ContactMethods} />
     ),
   },
   {

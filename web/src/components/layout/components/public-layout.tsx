@@ -16,12 +16,14 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 For commercial licensing, please contact support@quantumnous.com
 */
+import { ContactWidget } from '@/features/contact-widget'
 import type { TopNavLink } from '../types'
 import { PublicHeader, type PublicHeaderProps } from './public-header'
 
 type PublicLayoutProps = {
   children: React.ReactNode
   showMainContainer?: boolean
+  showContactWidget?: boolean
   navContent?: React.ReactNode
   headerProps?: Omit<PublicHeaderProps, 'navContent'>
   navLinks?: TopNavLink[]
@@ -53,6 +55,7 @@ export function PublicLayout(props: PublicLayoutProps) {
       ) : (
         props.children
       )}
+      {props.showContactWidget && <ContactWidget />}
     </div>
   )
 }
