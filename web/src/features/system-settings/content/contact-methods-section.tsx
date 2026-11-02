@@ -1,3 +1,11 @@
+/*
+Copyright (C) 2023-2026 QuantumNous
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+*/
 import { ArrowDown, ArrowUp, Plus, Trash2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
@@ -23,15 +31,21 @@ function parseMethods(raw: string): ContactMethod[] {
   try {
     const parsed: unknown = JSON.parse(raw || '[]')
     if (!Array.isArray(parsed)) return []
-    return parsed.map((item, index) => ({
-      name: typeof item.name === 'string' ? item.name : '',
-      description: typeof item.description === 'string' ? item.description : '',
-      url: typeof item.url === 'string' ? item.url : '',
-      icon: typeof item.icon === 'string' ? item.icon : '',
-      qr_code: typeof item.qr_code === 'string' ? item.qr_code : '',
-      enabled: item.enabled !== false,
-      sort: Number.isFinite(Number(item.sort)) ? Number(item.sort) : index,
-    }))
+    return parsed.map((rawItem, index) => {
+      const item =
+        rawItem && typeof rawItem === 'object'
+          ? (rawItem as Record<string, unknown>)
+          : {}
+      return {
+        name: typeof item.name === 'string' ? item.name : '',
+        description: typeof item.description === 'string' ? item.description : '',
+        url: typeof item.url === 'string' ? item.url : '',
+        icon: typeof item.icon === 'string' ? item.icon : '',
+        qr_code: typeof item.qr_code === 'string' ? item.qr_code : '',
+        enabled: item.enabled !== false,
+        sort: Number.isFinite(Number(item.sort)) ? Number(item.sort) : index,
+      }
+    })
   } catch {
     return []
   }
