@@ -18,10 +18,12 @@ For commercial licensing, please contact support@quantumnous.com
 */
 import type { TopNavLink } from '../types'
 import { PublicHeader, type PublicHeaderProps } from './public-header'
+import { ContactWidget } from '@/features/contact-widget'
 
 type PublicLayoutProps = {
   children: React.ReactNode
   showMainContainer?: boolean
+  showContactWidget?: boolean
   navContent?: React.ReactNode
   headerProps?: Omit<PublicHeaderProps, 'navContent'>
   navLinks?: TopNavLink[]
@@ -53,6 +55,7 @@ export function PublicLayout(props: PublicLayoutProps) {
       ) : (
         props.children
       )}
+      {props.showContactWidget && <ContactWidget />}
     </div>
   )
 }
