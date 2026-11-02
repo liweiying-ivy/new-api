@@ -3,6 +3,7 @@ package controller
 import (
 	"encoding/json"
 	"net/http"
+	"net/url"
 	"sort"
 	"strings"
 
@@ -11,18 +12,22 @@ import (
 )
 
 type contactItem struct {
-	Name string `json:"name"`
+	Name        string `json:"name"`
 	Description string `json:"description,omitempty"`
-	URL string `json:"url"`
-	Icon string `json:"icon,omitempty"`
-	QRCode string `json:"qr_code,omitempty"`
-	Enabled bool `json:"enabled"`
-	Sort int `json:"sort,omitempty"`
+	URL         string `json:"url"`
+	Icon        string `json:"icon,omitempty"`
+	QRCode      string `json:"qr_code,omitempty"`
+	Enabled     bool   `json:"enabled"`
+	Sort        int    `json:"sort,omitempty"`
 }
 
 func validContactURL(value string) bool {
-	value = strings.ToLower(strings.TrimSpace(value))
-	return strings.HasPrefix(value, "https://") || strings.HasPrefix(value, "http://")
+	parsed, err := url.Parse(strings.TrimSpace(value))
+	if err != nil {
+		return false
+	}
+	scheme := strings.ToLower(parsed.Scheme)
+	return (scheme == "http" || scheme == "https") && parsed.Hostname() != "" && parsed.User == nil
 }
 
 func GetPublicContacts(c *gin.Context) {
@@ -41,7 +46,10 @@ func GetPublicContacts(c *gin.Context) {
 	enabled := make([]contactItem, 0, len(items))
 	for _, item := range items {
 		item.Name = strings.TrimSpace(item.Name)
+		item.Description = strings.TrimSpace(item.Description)
 		item.URL = strings.TrimSpace(item.URL)
+		item.Icon = strings.TrimSpace(item.Icon)
+		item.QRCode = strings.TrimSpace(item.QRCode)
 		if !item.Enabled || item.Name == "" || !validContactURL(item.URL) {
 			continue
 		}
