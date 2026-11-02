@@ -36,12 +36,7 @@ export function ContactWidget() {
   return (
     <div className='fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3'>
       {open && (
-        <section
-          aria-label='客服联系方式'
-          aria-modal='true'
-          role='dialog'
-          className='w-[min(22rem,calc(100vw-3rem))] rounded-xl border bg-background p-4 shadow-xl'
-        >
+        <section aria-label='客服联系方式' className='w-[min(22rem,calc(100vw-3rem))] rounded-xl border bg-background p-4 shadow-xl'>
           <div className='mb-3 flex items-center justify-between'>
             <h2 className='font-semibold'>联系客服</h2>
             <button
@@ -56,18 +51,19 @@ export function ContactWidget() {
           <div className='flex flex-col gap-3'>
             {contacts.map((contact) => (
               <div key={contact.name + contact.url} className='flex items-start gap-3 rounded-lg border p-3'>
-                {contact.qr_code ? (
-                  <img
-                    src={contact.qr_code}
-                    alt={contact.name + '二维码'}
-                    referrerPolicy='no-referrer'
-                    className='size-16 shrink-0 rounded-md object-contain'
-                  />
-                ) : (
-                  <span className='flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary'>
+                <div className='flex shrink-0 flex-col items-center gap-2'>
+                  <span className='flex size-10 items-center justify-center rounded-lg bg-primary/10 text-primary'>
                     {contact.icon || <MessageCircle className='size-5' />}
                   </span>
-                )}
+                  {contact.qr_code && (
+                    <img
+                      src={contact.qr_code}
+                      alt={contact.name + '二维码'}
+                      referrerPolicy='no-referrer'
+                      className='size-16 rounded-md object-contain'
+                    />
+                  )}
+                </div>
                 <div className='min-w-0 flex-1'>
                   <div className='font-medium'>{contact.name}</div>
                   {contact.description && (
